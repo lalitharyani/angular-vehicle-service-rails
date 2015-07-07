@@ -12,7 +12,7 @@
 		        <div class="form-group">
 		          <label class="col-md-3">First Name:</label>
 		          <div class="col-md-6">
-		             <input ng-disabled= "isDisabled" class="form-control" type="text" ng-model="firstName" required />
+		             <input ng-disabled= "isDisabled" class="form-control" type="text" ng-model="requestData.firstName" required />
 		          </div>
 		        </div>
 		      </div>
@@ -24,7 +24,7 @@
 		        <div class="form-group">
 		          <label class="col-md-3">Last Name:</label>
 		          <div class="col-md-6">
-		             <input ng-disabled= "isDisabled" class="form-control" type="text" ng-model="lastName" required /></div>
+		             <input ng-disabled= "isDisabled" class="form-control" type="text" ng-model="requestData.lastName" required /></div>
 		        </div>
 		      </div>
 		    </div>
@@ -34,7 +34,7 @@
 		        <div class="form-group">
 		          <label class="col-md-3">Vehicle registration no:</label>
 		          <div class="col-md-6">
-		             <input ng-disabled= "isDisabled" class="form-control" type="text" ng-model="registrationNo" required /></div>
+		             <input ng-disabled= "isDisabled" class="form-control" type="text" ng-model="requestData.registrationNo" required /></div>
 		        </div>
 		      </div>
 		    </div>
@@ -44,7 +44,7 @@
 		        <div class="form-group">
 		          <label class="col-md-3">Mobile number:</label>
 		          <div class="col-md-6">
-		             <input ng-disabled= "isDisabled" class="form-control" type="number" ng-model="mobileNo" required /></div>
+		             <input ng-disabled= "isDisabled" class="form-control" type="number" ng-model="requestData.mobileNo" required /></div>
 		        </div>
 		      </div>
 		    </div>
@@ -54,7 +54,7 @@
 		        <div class="form-group">
 		          <label class="col-md-3">Address:</label>
 		          <div class="col-md-6">
-		             <textarea ng-disabled= "isDisabled" class="form-control" rows="4" cols="50"  ng-model="address" required /></textarea></div>
+		             <textarea ng-disabled= "isDisabled" class="form-control" rows="4" cols="50"  ng-model="requestData.address" required /></textarea></div>
 		        </div>
 		      </div>
 		    </div>
@@ -64,7 +64,7 @@
 		        <div class="form-group">
 		          <label class="col-md-3">Pickup Date:</label>
 		          <div class="col-md-6">
-		             <input ng-disabled= "isDisabled" class="form-control" ng-model="pickupDate" rows="4" cols="50" jqdatepicker required /></div>
+		             <input ng-disabled= "isDisabled" class="form-control" ng-model="requestData.pickupDate" rows="4" cols="50" jqdatepicker required /></div>
 		        </div>
 		      </div>
 		    </div>
@@ -74,10 +74,11 @@
 		        <div class="form-group">
 		          <label class="col-md-3">Return Date:</label>
 		          <div class="col-md-6">
-		             <input ng-disabled= "isDisabled" class="form-control" ng-model="returnDate" rows="4" cols="50" required /></div>
+		             <input ng-disabled= "isDisabled" class="form-control" ng-model="requestData.returnDate" rows="4" cols="50" required /></div>
 		        </div>
 		      </div>
 		    </div>
+
 		    <div class="row">
 		      <div class="col-xs-9">
 		        <div class="form-group">
