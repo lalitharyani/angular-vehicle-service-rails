@@ -8,13 +8,13 @@
     <th>Actions</th>
      
    
-    <tr ng-repeat ="vehicle in vehicleRequests">
+    <tr ng-repeat ="vehicle in vehicleRequests track by $index">
       <td> {{vehicle.firstName}}  {{vehicle.lastName}}</td>
       <td> {{vehicle.registrationNo}}</td>
       <td> {{vehicle.mobileNo}}</td>
       <td> 
       	<a href="#viewRequest/{{vehicle.id}}" class= "btn btn-default">View</a>&nbsp;&nbsp;
-      	<button ng-click="deleteRequest(vehicle.id, vehicleRequests.indexOf(vehicle))" class="btn btn-danger">Delete</button>
+      	<button ng-click="deleteRequest(vehicle.id, $index)" class="btn btn-danger">Delete</button>
       </td>
         
     </tr>
@@ -22,5 +22,5 @@
 
 
 
- <button ng-click="undo()" class="btn btn-info">Undo</button>
+ <button ng-click="undoRequest()" class="btn btn-info">Undo</button>
  <a href="#/requestform" class= "btn btn-primary">Add New Request</a>

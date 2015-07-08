@@ -26,11 +26,12 @@ app.factory('VehicleFactory', function () {
 
 
 ///Home Controller
-app.controller('HomeCtrl', ['$scope', 'VehicleFactory', function ($scope, VehicleFactory) {
+app.controller('HomeCtrl', ['$scope', 'VehicleFactory', '$window', function ($scope, VehicleFactory, $window) {
 
   VehicleFactory = [];
   // For each item in local storage...
   for( item in localStorage ) {
+
     // Parse the json string and add it to VehicleFactory factory
     var newItem = angular.fromJson( localStorage[item] );
     VehicleFactory.push( newItem );
@@ -40,18 +41,71 @@ app.controller('HomeCtrl', ['$scope', 'VehicleFactory', function ($scope, Vehicl
 
   // Delete  Request from system
   $scope.deleteRequest = function(requestID, index) {
+
+    //before deleting the item, store in session storage for 'Undo' action
+    var requestData = angular.fromJson(localStorage.getItem("item"+requestID));
+    if(requestData){
+      $window.sessionStorage.setItem('lastDeletedRequest', JSON.stringify(requestData) );
+    }
+
     // Delete item from localStorage & vehicleRequests array
     localStorage.removeItem( 'item' + requestID );
     $scope.vehicleRequests.splice(index, 1);
+
+    // we need to save / update last action performed by user in local storage for 'Undo'
+    $window.sessionStorage.setItem('lastActionPerformed', JSON.stringify("Delete") );
+
+    $window.alert("Request deleted successfully.");
+    
+  }
+
+  // Unod last Request
+  $scope.undoRequest = function() {
+
+    var ActionType = angular.fromJson($window.sessionStorage.getItem("lastActionPerformed"));
+
+    //if last action was 'Add' then we need to delete last item from localstorage & vehicleRequests Array
+    if(ActionType == "Add"){
+
+      //before deleting the item, store in session storage for 'Undo' action
+      var requestData = angular.fromJson(localStorage.getItem('item' + (localStorage.length)));
+      if(requestData){
+        $window.sessionStorage.setItem('lastDeletedRequest', JSON.stringify(requestData) );
+      }
+      $window.sessionStorage.setItem('lastActionPerformed', JSON.stringify("Delete") );
+      localStorage.removeItem( 'item' + (localStorage.length) );
+      $scope.vehicleRequests.splice(-1,1)
+    
+    //if last action was 'Delete' then we need to Add last item to localstorage & vehicleRequests Array
+    }else if(ActionType == "Delete"){
+
+      var oldRequest = angular.fromJson($window.sessionStorage.getItem("lastDeletedRequest"));
+
+      // Add Request object to localStorage as the value to a new property
+      localStorage.setItem( 'item' + (localStorage.length+1), JSON.stringify(oldRequest) );
+      
+      //here we need to make request id again
+      oldRequest["id"] = localStorage.length+1;
+
+      //remove request from session Storage
+      $window.sessionStorage.removeItem("lastDeletedRequest");
+      $window.sessionStorage.setItem('lastActionPerformed', JSON.stringify("Add") );
+
+      // Add deleted Request object to the model by adding it to the vehicleRequests array
+      $scope.vehicleRequests.push( oldRequest );
+
+     ///else do nothing
+    }else{
+      
+    }
+    
   }
 
 }]);
 
 
-
-
 ///Vehicle Controller
-app.controller('VehicleCtrl', ['$scope', '$location', 'VehicleFactory', '$routeParams', function ($scope, $location, VehicleFactory, $routeParams) {
+app.controller('VehicleCtrl', ['$scope', '$location', 'VehicleFactory', '$routeParams', '$window', function ($scope, $location, VehicleFactory, $routeParams, $window) {
   
   $scope.vehicleRequests = VehicleFactory;  // Array that will hold all vehicleRequests      
   $scope.failed = '';    // A message displayed if the form fails to submit
@@ -66,7 +120,7 @@ app.controller('VehicleCtrl', ['$scope', '$location', 'VehicleFactory', '$routeP
     
     //get the selected request from localstorage
     var requestData = localStorage.getItem("item"+$routeParams.requestId);
-    $scope.requestData = angular.fromJson(requestData)
+    $scope.requestData = angular.fromJson(requestData);
 
   }
 
@@ -80,8 +134,10 @@ app.controller('VehicleCtrl', ['$scope', '$location', 'VehicleFactory', '$routeP
       // Remove warning
       $scope.failed = '';
 
-      // Store contact data in an object         
-      var newRequest = $scope.requestData;
+      var newRequest = {};
+
+      // Store request data in an object         
+      newRequest = $scope.requestData;
       newRequest["id"] = localStorage.length+1;
 
       // Add Request object to localStorage as the value to a new property
@@ -89,6 +145,9 @@ app.controller('VehicleCtrl', ['$scope', '$location', 'VehicleFactory', '$routeP
 
       // Add new Request object to the model by adding it to the vehicleRequests array
       $scope.vehicleRequests.push( newRequest );
+
+      // we need to save / update last action performed by user in local storage for 'Undo'
+      $window.sessionStorage.setItem('lastActionPerformed', JSON.stringify("Add") );
 
       // Reset the inputs values for the form
       $scope.requestData = {};
