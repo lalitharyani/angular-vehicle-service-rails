@@ -120,7 +120,14 @@ app.controller('VehicleCtrl', ['$scope', '$location', 'VehicleFactory', '$routeP
     
     //get the selected request from localstorage
     var requestData = localStorage.getItem("item"+$routeParams.requestId);
-    $scope.requestData = angular.fromJson(requestData);
+    if(requestData){
+      $scope.requestData = angular.fromJson(requestData);
+
+      ///convert back date in object
+      $scope.requestData["pickupDate"] = new Date($scope.requestData["pickupDate"]);
+      $scope.requestData["returnDate"] = new Date($scope.requestData["returnDate"])
+
+    }
 
   }
 
