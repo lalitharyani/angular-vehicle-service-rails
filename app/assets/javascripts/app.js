@@ -167,6 +167,29 @@ app.controller('VehicleCtrl', ['$scope', '$location', 'VehicleFactory', '$routeP
     }
 
   };
+  
+  
+  //Validate Vehicle Registration Number. It should be unique.
+  $scope.onBlur = function(newRegistrationNo) {
+
+    $scope.error = false;
+    $scope.error_msg = "";
+
+    // For each item in local storage...
+    for( item in localStorage ) {
+
+      // Parse the json string and add it to VehicleFactory factory
+      var newItem = angular.fromJson( localStorage[item] );
+      if(newItem["registrationNo"]){
+        if(newItem["registrationNo"] === newRegistrationNo) {
+          $scope.error = true;
+          $scope.error_msg = 'Vehicle Number already in use. Please try another.';
+          $scope.requestData.registrationNo = "";
+        }
+      }
+    }
+     
+  }
 
 
 }]);

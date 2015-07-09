@@ -31,7 +31,10 @@
 		        <div class="form-group">
 		          <label class="col-md-3">Vehicle registration no:</label>
 		          <div class="col-md-6">
-		             <input ng-disabled= "isDisabled" class="form-control" type="text" ng-model="requestData.registrationNo" required /></div>
+		             <input ng-disabled= "isDisabled" class="form-control" type="text" ng-blur="onBlur(requestData.registrationNo)" ng-model="requestData.registrationNo" required />
+		             <span class="error-class" ng-show="error">{{error_msg}}</span>
+		           </div>
+		            
 		        </div>
 		      </div>
 		    </div>
